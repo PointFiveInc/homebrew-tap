@@ -5,7 +5,15 @@
 # NOTE: Uses GitHub API asset URLs (api.github.com/.../releases/assets/{id})
 # instead of github.com/.../releases/download/... — required for private repos
 # because the public download URL returns 404 even with valid OAuth auth.
+#
+# Token resolution order:
+#   1. HOMEBREW_GITHUB_API_TOKEN env var (explicit)
+#   2. `gh auth token` shell-out (auto for org members who've run gh auth login)
 class Tokenshift < Formula
+  def self.gh_token
+    ENV["HOMEBREW_GITHUB_API_TOKEN"] || `gh auth token 2>/dev/null`.chomp
+  end
+
   desc "Config-driven CLI proxy that compresses command output to save LLM tokens"
   homepage "https://github.com/pointfiveinc/tokenshift"
   version "0.2.3"
@@ -15,7 +23,7 @@ class Tokenshift < Formula
       url "https://api.github.com/repos/pointfiveinc/tokenshift/releases/assets/396933445",
         headers: [
           "Accept: application/octet-stream",
-          "Authorization: bearer #{ENV["HOMEBREW_GITHUB_API_TOKEN"]}"
+          "Authorization: bearer #{Tokenshift.gh_token}"
         ]
       sha256 "f94a034a675edc3aad16a7b2a06da2dc7b9c851eba2e99e124ea02b0d6697f88"
 
@@ -27,7 +35,7 @@ class Tokenshift < Formula
       url "https://api.github.com/repos/pointfiveinc/tokenshift/releases/assets/396933444",
         headers: [
           "Accept: application/octet-stream",
-          "Authorization: bearer #{ENV["HOMEBREW_GITHUB_API_TOKEN"]}"
+          "Authorization: bearer #{Tokenshift.gh_token}"
         ]
       sha256 "edd85481c95c2fe5848cac7e8fd2f7a58b1008d328f1c750f64ee5671bd7418c"
 
@@ -43,7 +51,7 @@ class Tokenshift < Formula
         url "https://api.github.com/repos/pointfiveinc/tokenshift/releases/assets/396933462",
           headers: [
             "Accept: application/octet-stream",
-            "Authorization: bearer #{ENV["HOMEBREW_GITHUB_API_TOKEN"]}"
+            "Authorization: bearer #{Tokenshift.gh_token}"
           ]
         sha256 "4a3a8fb3402dbe779ff73096f203cdf1e5d0af1d6e2f98f84bddb45c248dff8f"
 
@@ -57,7 +65,7 @@ class Tokenshift < Formula
         url "https://api.github.com/repos/pointfiveinc/tokenshift/releases/assets/396933460",
           headers: [
             "Accept: application/octet-stream",
-            "Authorization: bearer #{ENV["HOMEBREW_GITHUB_API_TOKEN"]}"
+            "Authorization: bearer #{Tokenshift.gh_token}"
           ]
         sha256 "37d9550102648343b5e698ab1f7412fa6b8c0499992843d92f25429564f57fd3"
 
