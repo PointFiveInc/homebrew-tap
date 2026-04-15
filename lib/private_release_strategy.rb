@@ -48,7 +48,7 @@ class GitHubPrivateRepositoryReleaseDownloadStrategy < CurlDownloadStrategy
 
   def set_github_token
     @github_token = ENV["HOMEBREW_GITHUB_API_TOKEN"]
-    @github_token ||= `gh auth token 2>/dev/null`.chomp
+    @github_token ||= token_from_gh
     @github_token ||= token_from_git_credential
     return if @github_token && !@github_token.empty?
 
@@ -56,10 +56,28 @@ class GitHubPrivateRepositoryReleaseDownloadStrategy < CurlDownloadStrategy
       No GitHub token found. Any of these will work:
         - export HOMEBREW_GITHUB_API_TOKEN=<token>   # explicit
         - gh auth login                               # gh CLI
-        - git push to github.com at least once       # git credential helper
+        - git push to github.com at least once       # git credential helper (HTTPS only)
       The token needs repo:read access on the source repo and must be
       SSO-authorized if the org enforces SAML SSO.
     ERR
+  end
+
+  # Homebrew sandboxes formula execution with a restricted PATH that typically
+  # doesn't include /opt/homebrew/bin or /usr/local/bin — so a bare `gh` call
+  # can't find the binary even when it's installed. Probe absolute paths instead.
+  def token_from_gh
+    gh_paths = [
+      "/opt/homebrew/bin/gh",                # Apple Silicon brew
+      "/usr/local/bin/gh",                   # Intel Mac brew
+      "/home/linuxbrew/.linuxbrew/bin/gh",   # Linuxbrew multi-user
+      "#{ENV['HOME']}/homebrew/bin/gh",      # Linuxbrew single-user
+      "/usr/bin/gh",                         # System package
+    ]
+    gh = gh_paths.find { |p| File.executable?(p) }
+    return nil unless gh
+
+    out = `#{gh} auth token 2>/dev/null`.chomp
+    out.empty? ? nil : out
   end
 
   def token_from_git_credential
