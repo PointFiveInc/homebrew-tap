@@ -11,7 +11,7 @@ class Tokenshift < Formula
   on_macos do
     if Hardware::CPU.intel?
       url "https://github.com/pointfiveinc/tokenshift/releases/download/v0.2.3/tokenshift_0.2.3_darwin_amd64.tar.gz", using: GitHubPrivateRepositoryReleaseDownloadStrategy
-      sha256 "6afa611fc56deea108088f4da2bd7449db4fcb00c4e3455b0b0ae1e60fc939de"
+      sha256 "f94a034a675edc3aad16a7b2a06da2dc7b9c851eba2e99e124ea02b0d6697f88"
 
       def install
         bin.install "tokenshift"
@@ -19,7 +19,7 @@ class Tokenshift < Formula
     end
     if Hardware::CPU.arm?
       url "https://github.com/pointfiveinc/tokenshift/releases/download/v0.2.3/tokenshift_0.2.3_darwin_arm64.tar.gz", using: GitHubPrivateRepositoryReleaseDownloadStrategy
-      sha256 "5c31824c613462d969eb4d71bf7bd14d0485bf1ec3f6827337d01c0a0e50bafa"
+      sha256 "edd85481c95c2fe5848cac7e8fd2f7a58b1008d328f1c750f64ee5671bd7418c"
 
       def install
         bin.install "tokenshift"
@@ -31,7 +31,7 @@ class Tokenshift < Formula
     if Hardware::CPU.intel?
       if Hardware::CPU.is_64_bit?
         url "https://github.com/pointfiveinc/tokenshift/releases/download/v0.2.3/tokenshift_0.2.3_linux_amd64.tar.gz", using: GitHubPrivateRepositoryReleaseDownloadStrategy
-        sha256 "e5894e0752de6656ad3589e78effb6c8444cf248cc59b0f89c8ba67d2bc727ed"
+        sha256 "4a3a8fb3402dbe779ff73096f203cdf1e5d0af1d6e2f98f84bddb45c248dff8f"
 
         def install
           bin.install "tokenshift"
@@ -41,7 +41,7 @@ class Tokenshift < Formula
     if Hardware::CPU.arm?
       if Hardware::CPU.is_64_bit?
         url "https://github.com/pointfiveinc/tokenshift/releases/download/v0.2.3/tokenshift_0.2.3_linux_arm64.tar.gz", using: GitHubPrivateRepositoryReleaseDownloadStrategy
-        sha256 "e21eaeb090e579d0a5574e2d9c8ef1374b0cabee9e3a41c7a527f52ecf05fc4b"
+        sha256 "37d9550102648343b5e698ab1f7412fa6b8c0499992843d92f25429564f57fd3"
 
         def install
           bin.install "tokenshift"
