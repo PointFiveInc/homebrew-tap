@@ -63,7 +63,10 @@ class GitHubPrivateRepositoryReleaseDownloadStrategy < CurlDownloadStrategy
   end
 
   def token_from_git_credential
-    out = `printf 'protocol=https\\nhost=github.com\\n\\n' | git credential fill 2>/dev/null`
+    # GIT_TERMINAL_PROMPT=0 prevents git from trying to prompt on stderr/tty
+    # when no credential helper is configured (common for SSH users). Without
+    # it, macOS fails with "device not configured" instead of quietly returning.
+    out = `printf 'protocol=https\\nhost=github.com\\n\\n' | GIT_TERMINAL_PROMPT=0 git credential fill 2>/dev/null`
     match = out.match(/^password=(.+)$/)
     match && !match[1].empty? ? match[1] : nil
   end
